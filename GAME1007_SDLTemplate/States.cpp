@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Background.h"
+#include "Player.h"
 
 
 using namespace std;
@@ -126,6 +127,7 @@ void GameState::Enter() // Used for initialization.
 	//SOMA::SetMusicVolume(32);
 	//SOMA::PlayMusic("song", -1, 2000);
 	TEMA::Load("Img/background.png", "background");
+	TEMA::Load("Img/player.png", "player");
 
 	m_objects.push_back(pair<string, GameObject*>("background",
 			new Background({ 0, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 1)));
@@ -140,9 +142,12 @@ void GameState::Enter() // Used for initialization.
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 2048, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 3)));
 	m_objects.push_back(pair<string, GameObject*>("background",
-		new Background({ 3072, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 4)));
+		new Background({ 3072, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 5)));
 	m_objects.push_back(pair<string, GameObject*>("background",
-		new Background({ 3072, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 4)));
+		new Background({ 3072, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 5)));
+
+	m_objects.push_back(pair<string, GameObject*>("P",
+		new Player({ 0,0,50,37 }, { 200,500,100,74 })));
 }
 
 void GameState::Update()
