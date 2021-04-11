@@ -26,7 +26,7 @@ void Player::Update()
 	}
 	else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 	{
-		if (GetDst()->x < 1000)
+		if (GetDst()->x < 900)
 			GetDst()->x += 5;
 	}
 	else if (EVMA::KeyHeld(SDL_SCANCODE_A))
@@ -43,7 +43,7 @@ void Player::Update()
 	}
 
 	
-	if (GetDst()->y < 500)
+	if (GetDst()->y < 490)
 	{
 		m_velocity -= m_gravity;
 		GetDst()->y -= m_velocity;
@@ -51,7 +51,7 @@ void Player::Update()
 	}
 	else
 	{
-		GetDst()->y = 500;
+		GetDst()->y = 490;
 		m_velocity = 0;
 	}
 	

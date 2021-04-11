@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Background.h"
+#include "ObstacleManager.h"
 #include "Player.h"
 
 
@@ -128,7 +129,7 @@ void GameState::Enter() // Used for initialization.
 	//SOMA::PlayMusic("song", -1, 2000);
 	TEMA::Load("Img/background.png", "background");
 	TEMA::Load("Img/player.png", "player");
-
+	TEMA::Load("Img/obstacles.png", "obstacles");
 	m_objects.push_back(pair<string, GameObject*>("background",
 			new Background({ 0, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 1)));
 	m_objects.push_back(pair<string, GameObject*>("background",
@@ -146,8 +147,18 @@ void GameState::Enter() // Used for initialization.
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 3072, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 5)));
 
+	
+	m_objects.push_back(pair<string, GameObject*>("OBMA",
+		new ObstacleManager()));
 	m_objects.push_back(pair<string, GameObject*>("P",
-		new Player({ 0,0,50,37 }, { 200,500,100,74 })));
+		new Player({ 0,0,50,37 }, { 200,300,100,74 })));
+	
+	m_objects.push_back(pair<string, GameObject*>("background",
+		new Background({ 3072, 0, 1024, 768 }, { 0, 100, 1024, 768 }, 5)));
+	m_objects.push_back(pair<string, GameObject*>("background",
+		new Background({ 3072, 0, 1024, 768 }, { 1024, 100, 1024, 768 }, 5)));
+
+
 }
 
 void GameState::Update()
