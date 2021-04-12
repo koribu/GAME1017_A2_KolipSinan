@@ -106,14 +106,15 @@ GameState::GameState(){}
 
 void GameState::Enter() // Used for initialization.
 {
+	m_dyingCounter = 0;
 	//TEMA::Load("Img/background.png", "bg");
 	//TEMA::Load("Img/Sprites.png", "sprites");
 	//TEMA::Load("Img/enemy.png", "enemy");
 	//TEMA::Load("Img/asteroid.png", "asteroid");
-	//SOMA::Load("Aud/pLaser.wav", "pLaser", SOUND_SFX);
-	//SOMA::Load("Aud/explosion.wav", "explosion", SOUND_SFX);
-	//SOMA::Load("Aud/astrExplosion.wav", "astrexplode", SOUND_SFX);
-	//SOMA::Load("Aud/FincaTenda.mp3", "song", SOUND_MUSIC);
+	SOMA::Load("Aud/jump.wav", "jump", SOUND_SFX);
+	SOMA::Load("Aud/explosion.wav", "explosion", SOUND_SFX);
+	SOMA::Load("Aud/astrExplosion.wav", "astrexplode", SOUND_SFX);
+	SOMA::Load("Aud/FincaTenda.mp3", "song", SOUND_MUSIC);
 	//
 	//m_objects.push_back(pair<string, GameObject*>("bg1",
 	//	new Image({ 0, 0, 1024, 768 }, { 0, 0, 1024, 768 }, "bg")));
@@ -163,18 +164,10 @@ void GameState::Enter() // Used for initialization.
 
 void GameState::Update()
 {
-	//if (score >= 7)
-	//{
-	//	STMA::ChangeState(new WinState);
-	//	return;
-	//}
-	//GetIt("bg1")->second->GetDst()->x -= 2;
-	//GetIt("bg2")->second->GetDst()->x -= 2;
-	//if (GetIt("bg1")->second->GetDst()->x <= -1024)// if first bg goes completely off-screen
-	//{// bounce bask to orginal positions.
-	//	GetIt("bg1")->second->GetDst()->x = 0;
-	//	GetIt("bg2")->second->GetDst()->x = 1024;
-	//}
+
+	auto obs = static_cast<ObstacleManager*>(GetGo("OBMA"));
+	auto p = static_cast<Player*>(GetGo("Player"));
+	
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_X))
 	{
@@ -197,20 +190,32 @@ void GameState::Update()
 	}
 	for (auto const& i : m_objects)
 	{
+		if(p->isDead())
+		{
+			m_dyingCounter++;
+			if (m_dyingCounter > 100)
+			{
+				STMA::ChangeState(new LoseState());
+				return;
+			}
+			p->Update();
+			break;
+		}
 		i.second->Update();
 		if (STMA::StateChanging()) return;
 	}
 
 
 	
-	auto obs = static_cast<ObstacleManager*>(GetGo("OBMA"))->getObstacles();
-	auto p = GetGo("Player");
 
-	for (int i = 0; i < obs->size(); ++i)
+
+	for (int i = 0; i < obs->getObstacles()->size(); ++i)
 	{
-		if(COMA::AABBCheck(p->getCollisionRect(),obs->operator[](i)->getCollisionRect()))
+		if(COMA::AABBCheck(p->getCollisionRect(),obs->getObstacles()->operator[](i)->getCollisionRect()))
 		{
 			cout << "player dead" << endl;
+			p->setDead();
+			obs->gameOver();
 		}
 		//cout << obs->operator[](i)->getCollisionRect().x<< obs->operator[](i)->getCollisionRect().y<< obs->operator[](i)->getCollisionRect().w<<" "<< obs->operator[](i)->getCollisionRect().h << endl;
 	}

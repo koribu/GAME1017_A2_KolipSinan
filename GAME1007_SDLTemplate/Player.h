@@ -13,9 +13,11 @@ public:
 	void Update();
 	void Render();
 
+	void setDead();
+	bool isDead();
 
 private:
-	enum AnimationMod {RUN,JUMP,ROLL};
+	enum AnimationMod {RUN,JUMP,ROLL,DEAD};
 	AnimationMod m_aniMod;
 
 	void Animate();

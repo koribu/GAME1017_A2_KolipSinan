@@ -41,6 +41,7 @@ public:
 	virtual void Exit();
 	virtual void Resume();
 	int score;
+	int m_dyingCounter;
 };
 
 class PauseState : public State

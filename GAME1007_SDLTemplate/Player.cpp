@@ -21,6 +21,11 @@ Player::~Player()
 
 void Player::Update()
 {
+	if(m_aniMod ==DEAD && GetDst()->y == 490)
+	{
+		Animate();
+		return;
+	}
 	m_aniMod = RUN;
 
 	m_collisionRect = m_dst;
@@ -83,6 +88,18 @@ void Player::Render()
 	SDL_RenderDrawRectF(Engine::Instance().GetRenderer(),&m_collisionRect);
 }
 
+void Player::setDead()
+{
+	m_aniMod = DEAD;
+}
+
+bool Player::isDead()
+{
+	if (m_aniMod == DEAD)
+		return true;
+	return false;
+}
+
 
 void Player::Animate()
 {
@@ -104,7 +121,9 @@ void Player::Animate()
 		m_iSpriteMax = 6;
 		break;
 	case DEAD:
-
+		m_iSpriteMin = 3;
+		m_iSpriteYaxis = 9;
+		m_iSpriteMax = 6;
 	default:
 			break;
 	}
@@ -112,10 +131,14 @@ void Player::Animate()
 	if (m_iFrame == m_iFrameMax)
 	{
 		m_iFrame = 0;
-		m_iSprite++;
-		if (m_iSprite == m_iSpriteMax)
+		if (m_aniMod != DEAD && m_iSprite != m_iSpriteMax)
 		{
-			m_iSprite = m_iSpriteMin;
+			m_iSprite++;
+
+			if (m_iSprite == m_iSpriteMax)
+			{
+				m_iSprite = m_iSpriteMin;
+			}
 		}
 	}
 
