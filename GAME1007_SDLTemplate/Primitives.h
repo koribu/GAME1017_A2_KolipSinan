@@ -2,6 +2,8 @@
 #ifndef _PRIMITIVES_H_
 #define _PRIMITIVES_H_
 
+#include <SDL_ttf.h>
+
 #include "GameObject.h"
 
 class Image : public SpriteObject
@@ -37,5 +39,27 @@ private:
 	bool m_fill;
 	SDL_Color m_color;
 };
+
+class Label : public GameObject
+{
+public: // Public methods.
+	Label(std::string key, const float x, const float y, const char* str, const SDL_Color col = { 255,255,255,255 });
+	~Label();
+	void Update() {}
+	void Render();
+	const char* GetText() const { return m_string; }
+	void SetText(const char* c);
+	void SetPos(const float x, const float y);
+	void SetColor(const SDL_Color& col);
+	void UseFont(std::string key);
+
+private: // Private properties.
+	TTF_Font* m_font;
+	SDL_Color m_textColor;
+	SDL_Rect m_textRect;
+	SDL_Texture* m_pTexture;
+	char m_string[256];
+};
+
 
 #endif

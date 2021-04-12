@@ -1,5 +1,7 @@
 #include "Obstacle.h"
 
+#include "SoundManager.h"
+
 Obstacle::Obstacle(SDL_Rect s, SDL_FRect d,ObstacleTypes type): SpriteObject(s,d)
 {
 	m_aniMods = SPEAR;
@@ -105,6 +107,7 @@ void Obstacle::Update()
 				{
 					m_collisionRect.h = m_rangeMax;
 					m_collisionRect.y = m_dst.y;
+					SOMA::PlaySound("spear");
 				}
 
 				else if (m_iSprite == 3 || m_iSprite == 5)
@@ -129,7 +132,11 @@ void Obstacle::Update()
 				//else if (m_collisionRect.h <= 0)
 				//	m_moveRange = -m_moveRange;
 				if (m_iSprite == 4)
+				{
 					m_collisionRect.h = m_rangeMax;
+					SOMA::PlaySound("spear");
+				}
+			
 				else if (m_iSprite == 3 || m_iSprite == 5)
 					m_collisionRect.h = m_rangeMax * 2 / 3;
 				else

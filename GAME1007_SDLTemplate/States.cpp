@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Background.h"
+#include "FontManager.h"
 #include "ObstacleManager.h"
 #include "Player.h"
 
@@ -107,30 +108,22 @@ GameState::GameState(){}
 void GameState::Enter() // Used for initialization.
 {
 	m_dyingCounter = 0;
-	//TEMA::Load("Img/background.png", "bg");
-	//TEMA::Load("Img/Sprites.png", "sprites");
-	//TEMA::Load("Img/enemy.png", "enemy");
-	//TEMA::Load("Img/asteroid.png", "asteroid");
+
 	SOMA::Load("Aud/jump.wav", "jump", SOUND_SFX);
-	SOMA::Load("Aud/explosion.wav", "explosion", SOUND_SFX);
-	SOMA::Load("Aud/astrExplosion.wav", "astrexplode", SOUND_SFX);
-	SOMA::Load("Aud/FincaTenda.mp3", "song", SOUND_MUSIC);
-	//
-	//m_objects.push_back(pair<string, GameObject*>("bg1",
-	//	new Image({ 0, 0, 1024, 768 }, { 0, 0, 1024, 768 }, "bg")));
-	//m_objects.push_back(pair<string, GameObject*>("bg2",
-	//	new Image({ 0, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, "bg")));
-	//m_objects.push_back(pair<string, GameObject*>("astf",
-	//	new AsteroidField(6,200)));
-	//m_objects.push_back(pair<string, GameObject*>("ship",
-	//	new SpaceShip({ 0, 0, 100, 100 }, { 462.0f, 334.0f, 100.0f, 100.0f })));
-	//m_objects.push_back(pair<string, GameObject*>("enemyMA", new EnemyManager(1, 300)));
-	//SOMA::SetSoundVolume(16);
-	//SOMA::SetMusicVolume(32);
-	//SOMA::PlayMusic("song", -1, 2000);
+	SOMA::Load("Aud/dying.wav", "dying", SOUND_SFX);
+	SOMA::Load("Aud/spearSound.wav", "spear", SOUND_SFX);
+	SOMA::Load("Aud/Machadeiro.mp3", "song", SOUND_MUSIC);
+
+	SOMA::SetSoundVolume(16);
+	SOMA::SetMusicVolume(32);
+	SOMA::PlayMusic("song", -1, 2000);
+	
 	TEMA::Load("Img/background.png", "background");
 	TEMA::Load("Img/player.png", "player");
 	TEMA::Load("Img/obstacles.png", "obstacles");
+
+	FOMA::Load("Img/ltype.TTF", "Label", 24);
+	
 	m_objects.push_back(pair<string, GameObject*>("background",
 			new Background({ 0, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 1)));
 	m_objects.push_back(pair<string, GameObject*>("background",
@@ -159,7 +152,9 @@ void GameState::Enter() // Used for initialization.
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 3072, 0, 1024, 768 }, { 1024, 100, 1024, 768 }, 5)));
 
-
+	m_label = new Label("Label", 400, 50, "Timer: 0");
+	m_timer.Start();
+	SOMA::PlayMusic("song");
 }
 
 void GameState::Update()
@@ -167,7 +162,8 @@ void GameState::Update()
 
 	auto obs = static_cast<ObstacleManager*>(GetGo("OBMA"));
 	auto p = static_cast<Player*>(GetGo("Player"));
-	
+
+
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_X))
 	{
@@ -188,21 +184,26 @@ void GameState::Update()
 		STMA::ChangeState(new WinState());
 		return;
 	}
-	for (auto const& i : m_objects)
+	if (p->isDead())
 	{
-		if(p->isDead())
+		m_dyingCounter++;
+		if (m_dyingCounter > 100)
 		{
-			m_dyingCounter++;
-			if (m_dyingCounter > 100)
-			{
-				STMA::ChangeState(new LoseState());
-				return;
-			}
-			p->Update();
-			break;
+			STMA::ChangeState(new LoseState());
+			return;
 		}
-		i.second->Update();
-		if (STMA::StateChanging()) return;
+		p->Update();		
+	}
+	else
+	{
+		m_timer.Update();
+		for (auto const& i : m_objects)
+		{
+
+			
+			i.second->Update();
+			if (STMA::StateChanging()) return;
+		}
 	}
 
 
@@ -329,8 +330,15 @@ void GameState::Render()
 	SDL_RenderClear(Engine::Instance().GetRenderer());
 	for (auto const& i : m_objects)
 		i.second->Render();
+	if(m_timer.HasChanged())
+	{
+		string temp = "Timer: " + m_timer.GetTime();
+		m_label->SetText(temp.c_str());
+	}
+	m_label->Render();
 	if ( dynamic_cast<GameState*>(STMA::GetStates().back()) ) // Check to see if current state is of type GameState
 		State::Render();
+	
 }
 
 void GameState::Exit()

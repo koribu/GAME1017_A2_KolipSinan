@@ -62,6 +62,8 @@
     </ClCompile>
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="ObstacleManager.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="FontManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextureManager.h">
@@ -111,5 +113,7 @@
     <ClInclude Include="ObstacleTypes.h">
       <Filter>Enum</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="FontManager.h" />
   </ItemGroup>
 </Project>

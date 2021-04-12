@@ -1,6 +1,7 @@
 #include "Player.h"
 
 #include "EventManager.h"
+#include "SoundManager.h"
 
 Player::Player(SDL_Rect s, SDL_FRect d):SpriteObject(s,d) 
 {
@@ -59,6 +60,8 @@ void Player::Update()
 		cout << "hello";
 		m_velocity += m_jumpForce;
 		GetDst()->y -= m_velocity;
+
+		SOMA::PlaySound("jump");
 	}
 
 	
@@ -91,6 +94,7 @@ void Player::Render()
 void Player::setDead()
 {
 	m_aniMod = DEAD;
+	SOMA::PlaySound("dying");
 }
 
 bool Player::isDead()

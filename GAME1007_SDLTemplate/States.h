@@ -3,6 +3,8 @@
 #define _STATES_H_
 
 #include "GameObject.h"
+#include "Primitives.h"
+#include "Timer.h"
 
 class State // This is the abstract base class for all states
 {
@@ -42,6 +44,9 @@ public:
 	virtual void Resume();
 	int score;
 	int m_dyingCounter;
+
+	Label* m_label ;
+	Timer m_timer;
 };
 
 class PauseState : public State
