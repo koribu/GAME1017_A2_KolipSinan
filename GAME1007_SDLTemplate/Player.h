@@ -13,6 +13,7 @@ public:
 	void Update();
 	void Render();
 
+
 private:
 	enum AnimationMod {RUN,JUMP,ROLL};
 	AnimationMod m_aniMod;
@@ -30,7 +31,6 @@ private:
 		m_velocity,
 		m_gravity;
 
-	
 	
 };
 

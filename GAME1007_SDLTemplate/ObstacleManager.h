@@ -14,6 +14,6 @@ public:
 	void Update();
 	void Render();
 
-	vector<Obstacle*> getObstacles();
+	vector<Obstacle*>* getObstacles();
 };
 

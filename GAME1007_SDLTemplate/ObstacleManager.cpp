@@ -41,7 +41,7 @@ void ObstacleManager::Render()
 	}
 }
 
-vector<Obstacle*> ObstacleManager::getObstacles()
+vector<Obstacle*>* ObstacleManager::getObstacles()
 {
-	return m_obstacles;
+	return &m_obstacles;
 }

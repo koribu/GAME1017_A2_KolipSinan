@@ -150,7 +150,7 @@ void GameState::Enter() // Used for initialization.
 	
 	m_objects.push_back(pair<string, GameObject*>("OBMA",
 		new ObstacleManager()));
-	m_objects.push_back(pair<string, GameObject*>("P",
+	m_objects.push_back(pair<string, GameObject*>("Player",
 		new Player({ 0,0,50,37 }, { 200,300,100,74 })));
 	
 	m_objects.push_back(pair<string, GameObject*>("background",
@@ -201,9 +201,18 @@ void GameState::Update()
 		if (STMA::StateChanging()) return;
 	}
 
-	for (auto element : static_cast<ObstacleManager>(GetGo("OBMA")).getObstacles())
+
+	
+	auto obs = static_cast<ObstacleManager*>(GetGo("OBMA"))->getObstacles();
+	auto p = GetGo("Player");
+
+	for (int i = 0; i < obs->size(); ++i)
 	{
-		element->getCollisionRect();
+		if(COMA::AABBCheck(p->getCollisionRect(),obs->operator[](i)->getCollisionRect()))
+		{
+			cout << "player dead" << endl;
+		}
+		//cout << obs->operator[](i)->getCollisionRect().x<< obs->operator[](i)->getCollisionRect().y<< obs->operator[](i)->getCollisionRect().w<<" "<< obs->operator[](i)->getCollisionRect().h << endl;
 	}
 	
 	//// Check collision. Player vs. asteroids.

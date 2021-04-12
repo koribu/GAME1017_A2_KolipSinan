@@ -16,12 +16,22 @@ public: // Methods.
 	void SetDst(SDL_FRect d) { m_dst = d; }
 	const bool GetEnabled() const { return m_enabled; }
 	void SetEnabled(const bool e) { m_enabled = e; }
+
+	const SDL_FRect& getCollisionRect()
+	{
+		return m_collisionRect;
+	}
 protected: // Attributes.
 	SDL_FRect m_dst;
 	bool m_enabled;
+
+
+	SDL_FRect m_collisionRect;
 protected: // Methods.
 	GameObject() :m_dst({ 0,0,0,0 }), m_enabled(true) {}
-	GameObject(const SDL_FRect d) :m_dst(d), m_enabled(true) {}
+	GameObject(const SDL_FRect d) :m_dst(d), m_enabled(true) {
+		m_collisionRect = d;
+	}
 };
 
 class SpriteObject : public GameObject
