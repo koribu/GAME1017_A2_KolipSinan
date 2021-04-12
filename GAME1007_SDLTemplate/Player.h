@@ -29,7 +29,9 @@ private:
 	float m_jumpForce,
 		m_velocity,
 		m_gravity;
-	;
+
+	
+	
 };
 
 #endif

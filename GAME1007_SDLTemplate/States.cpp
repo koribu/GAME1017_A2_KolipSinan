@@ -200,6 +200,12 @@ void GameState::Update()
 		i.second->Update();
 		if (STMA::StateChanging()) return;
 	}
+
+	for (auto element : static_cast<ObstacleManager>(GetGo("OBMA")).getObstacles())
+	{
+		element->getCollisionRect();
+	}
+	
 	//// Check collision. Player vs. asteroids.
 	//if (GetGo("ship") != nullptr)
 	//{

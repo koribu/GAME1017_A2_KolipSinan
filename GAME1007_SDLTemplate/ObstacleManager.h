@@ -13,5 +13,7 @@ public:
 
 	void Update();
 	void Render();
+
+	vector<Obstacle*> getObstacles();
 };
 

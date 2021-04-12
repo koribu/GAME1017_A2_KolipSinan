@@ -15,8 +15,11 @@ private:
 		m_iSpriteYaxis,
 		m_iFrame,
 		m_iFrameMax;
+	float m_moveRange,m_rangeMax,m_speed;
 
 	SDL_RendererFlip m_flip;
+
+	SDL_FRect m_collisionRect;
 
 public:
 	Obstacle(SDL_Rect s, SDL_FRect d,ObstacleTypes type);
@@ -25,6 +28,7 @@ public:
 	void Update() override;
 	void Render() override;
 
+	SDL_FRect getCollisionRect();
 };
 
 #endif
