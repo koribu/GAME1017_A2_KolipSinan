@@ -16,6 +16,9 @@
     <Filter Include="Enum">
       <UniqueIdentifier>{577fffaf-4278-42c4-84b4-aa87b5b63082}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject\Obstacle">
+      <UniqueIdentifier>{c457b261-e59e-4a4b-80b8-7a7b67189065}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoundManager.cpp">
@@ -45,9 +48,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="AsteroidSprites.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="Button3.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -60,10 +60,18 @@
     <ClCompile Include="Player.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Obstacle.cpp" />
-    <ClCompile Include="ObstacleManager.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>GameObject\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleManager.cpp">
+      <Filter>GameObject\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextureManager.h">
@@ -90,9 +98,6 @@
     <ClInclude Include="Engine.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="AsteroidSprites.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Button3.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -108,12 +113,20 @@
     <ClInclude Include="Player.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Obstacle.h" />
-    <ClInclude Include="ObstacleManager.h" />
     <ClInclude Include="ObstacleTypes.h">
       <Filter>Enum</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="FontManager.h" />
+    <ClInclude Include="FontManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>GameObject\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleManager.h">
+      <Filter>GameObject\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

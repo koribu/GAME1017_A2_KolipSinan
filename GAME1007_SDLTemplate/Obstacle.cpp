@@ -39,7 +39,7 @@ Obstacle::Obstacle(SDL_Rect s, SDL_FRect d,ObstacleTypes type): SpriteObject(s,d
 		m_iSpriteMax = 7;
 		m_iSpriteYaxis = 0;
 
-		m_iFrameMax = 20;
+		m_iFrameMax = 10;
 
 		
 		break;
@@ -58,7 +58,7 @@ Obstacle::Obstacle(SDL_Rect s, SDL_FRect d,ObstacleTypes type): SpriteObject(s,d
 		m_iSpriteMax = 7;
 		m_iSpriteYaxis = 0;
 
-		m_iFrameMax = 20;
+		m_iFrameMax = 10;
 
 		m_flip = SDL_FLIP_VERTICAL;
 		break;
@@ -176,7 +176,7 @@ void Obstacle::Render()
 	if(m_aniMods == SPEARFLIP)
 	{
 		SDL_Rect tempSrc = { 0,525,200,250 };
-		SDL_FRect tempDst = {m_dst.x-10,m_dst.y-230,200,250};	
+		SDL_FRect tempDst = {m_dst.x-10,m_dst.y-209,200,250};	
 		//tempDst.y -= 300;
 		
 		SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("obstacles"),
@@ -185,7 +185,7 @@ void Obstacle::Render()
 
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("obstacles"),
 		&m_src, &m_dst, 0, nullptr, m_flip);
-	SDL_RenderDrawRectF(Engine::Instance().GetRenderer(), &m_collisionRect);
+//	SDL_RenderDrawRectF(Engine::Instance().GetRenderer(), &m_collisionRect);
 
 }
 

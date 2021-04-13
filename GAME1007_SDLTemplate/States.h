@@ -70,18 +70,10 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Resume();
+
+	Label* m_label;
 };
 
-class WinState : public State
-{
-public:
-	WinState();
-	virtual void Enter();
-	virtual void Update();
-	virtual void Render();
-	virtual void Exit();
-	virtual void Resume();
-};
 
 #endif
 

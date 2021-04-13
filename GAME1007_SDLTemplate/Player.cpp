@@ -68,7 +68,6 @@ void Player::Update()
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)&& GetDst()->y == 490)
 	{
-		cout << "hello";
 		m_velocity += m_jumpForce;
 		GetDst()->y -= m_velocity;
 

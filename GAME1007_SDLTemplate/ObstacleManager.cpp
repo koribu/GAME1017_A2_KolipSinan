@@ -2,7 +2,7 @@
 
 ObstacleManager::ObstacleManager()
 {
-	m_spawnCounter = 0;
+	m_spawnCounter = 150;
 	srand(time(NULL));
 
 	m_gameOver = false;
@@ -39,9 +39,9 @@ void ObstacleManager::Update()
 			obstacle->Update();
 		}
 
-		if (m_spawnCounter > 150 + rand() % 75)
+		if (m_spawnCounter > 100 + rand() % 75)
 		{
-			m_obstacles.push_back(new Obstacle({ 0,0,0,0 }, { 1100,400,0,0 }, static_cast<ObstacleTypes>(rand() % 3)));
+			m_obstacles.push_back(new Obstacle({ 0,0,0,0 }, { 1100,400,0,0 }, static_cast<ObstacleTypes>(rand() % 4)));
 			m_spawnCounter = 0;
 		}
 	}

@@ -1,11 +1,13 @@
 #include "States.h"
+
+#include <fstream>
+
 #include "StateManager.h"
 #include "TextureManager.h"
 #include "Engine.h"
 #include "SoundManager.h"
 #include "Button3.h"
 
-#include "AsteroidSprites.h"
 #include "CollisionManager.h"
 #include "EventManager.h"
 #include "Primitives.h"
@@ -19,6 +21,9 @@
 
 
 using namespace std;
+
+string bestTime;
+string lastTime;
 
 void State::Render()
 {
@@ -135,23 +140,32 @@ void GameState::Enter() // Used for initialization.
 		new Background({ 2048, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 3)));
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 2048, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 3)));
+
+	m_objects.push_back(pair<string, GameObject*>("OBMA",
+		new ObstacleManager()));
+	
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 3072, 0, 1024, 768 }, { 0, 0, 1024, 768 }, 5)));
 	m_objects.push_back(pair<string, GameObject*>("background",
 		new Background({ 3072, 0, 1024, 768 }, { 1024, 0, 1024, 768 }, 5)));
 
 	
-	m_objects.push_back(pair<string, GameObject*>("OBMA",
-		new ObstacleManager()));
+
 	m_objects.push_back(pair<string, GameObject*>("Player",
 		new Player({ 0,0,50,37 }, { 200,300,100,74 })));
 	
-	m_objects.push_back(pair<string, GameObject*>("background",
-		new Background({ 3072, 0, 1024, 768 }, { 0, 100, 1024, 768 }, 5)));
-	m_objects.push_back(pair<string, GameObject*>("background",
-		new Background({ 3072, 0, 1024, 768 }, { 1024, 100, 1024, 768 }, 5)));
 
-	m_label = new Label("Label", 400, 50, "Timer: 0");
+	bestTime = m_timer.GetTime();
+	m_dyingCounter++;
+
+	ifstream file;
+	file.open("time.txt");
+	file >> bestTime;
+	file.close();
+	string temp;
+	temp = "Timer: 0     Best Time: " + bestTime;
+	
+	m_label = new Label("Label", 400, 50, temp.c_str());
 	m_timer.Start();
 	SOMA::PlayMusic("song");
 }
@@ -171,20 +185,31 @@ void GameState::Update()
 	}
 	else if(EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
+		m_timer.Pause();
 		STMA::PushState(new PauseState());
+		return;
+
 	}
 	else if (EVMA::KeyPressed(SDL_SCANCODE_U))
 	{
 		STMA::ChangeState(new LoseState());
 		return;
 	}
-	else if (EVMA::KeyPressed(SDL_SCANCODE_Y))
-	{
-		STMA::ChangeState(new WinState());
-		return;
-	}
+
 	if (p->isDead())
 	{
+		lastTime = m_timer.GetTime();
+		int a = atoi(bestTime.c_str());
+		int b = atoi(m_timer.GetTime().c_str());
+		if(b>a)
+		{
+			bestTime = m_timer.GetTime();
+			ofstream file;
+			file.open("time.txt");
+			file << bestTime;
+			file.close();
+		}
+
 		m_dyingCounter++;
 		if (m_dyingCounter > 100)
 		{
@@ -213,11 +238,9 @@ void GameState::Update()
 	{
 		if(COMA::AABBCheck(p->getCollisionRect(),obs->getObstacles()->operator[](i)->getCollisionRect()))
 		{
-			cout << "player dead" << endl;
 			p->setDead();
 			obs->gameOver();
 		}
-		//cout << obs->operator[](i)->getCollisionRect().x<< obs->operator[](i)->getCollisionRect().y<< obs->operator[](i)->getCollisionRect().w<<" "<< obs->operator[](i)->getCollisionRect().h << endl;
 	}
 	
 }
@@ -230,7 +253,7 @@ void GameState::Render()
 		i.second->Render();
 	if(m_timer.HasChanged())
 	{
-		string temp = "Timer: " + m_timer.GetTime();
+		string temp = "Timer: " + m_timer.GetTime() + "     Best Time: "+ bestTime;
 		m_label->SetText(temp.c_str());
 	}
 	m_label->Render();
@@ -238,11 +261,6 @@ void GameState::Render()
 		State::Render();
 	
 }
-
-
-
-
-
 
 
 void GameState::Exit()
@@ -264,22 +282,16 @@ void GameState::Exit()
 	}
 }
 
-void GameState::Resume(){}
+void GameState::Resume() { m_timer.Resume(); }
 
 PauseState::PauseState(){}
 
 void PauseState::Enter()
 {
-	TEMA::Load("Img/Title.png", "title");
 	TEMA::Load("Img/resumebutton.png", "resume");
-	SOMA::Load("Aud/Title.mp3", "title", SOUND_MUSIC);
-	m_objects.push_back(pair<string, GameObject*>("title",
-		new Image({ 0, 0, 800, 156 }, { 112, 125, 400, 78 }, "title")));
 	m_objects.push_back(pair<string, GameObject*>("resume",
 		new ResumeButton({ 0, 0, 400, 100 }, { 412, 384, 200, 50 }, "resume")));
-	SOMA::AllocateChannels(16);
-	SOMA::SetMusicVolume(32);
-	SOMA::PlayMusic("title", -1, 2000);
+
 }
 
 void PauseState::Update()
@@ -313,7 +325,7 @@ void PauseState::Render()
 void PauseState::Exit()
 {
 
-	SOMA::Unload("engines", SOUND_SFX);
+	TEMA::Unload(( "resume"));
 
 	for (auto& i : m_objects)
 	{
@@ -336,10 +348,16 @@ void LoseState::Enter()
 {
 	TEMA::Load("Img/menubutton.png", "menu");
 	TEMA::Load("Img/LoseBack.jpg", "losebg");
+
+	FOMA::Load("Img/ltype.TTF", "Label", 24);
+	
 	m_objects.push_back(pair<string, GameObject*>("LoseBg",
 		new Image({ 0, 0, 1920, 1200 }, { 0, 0, 1024, 768 }, "losebg")));
 	m_objects.push_back(pair<string, GameObject*>("MainMenu",
 		new MainMenuButton({ 0, 0, 400, 100 }, { 412, 384, 200, 50 }, "menu")));
+
+	string temp = "     Last Time: " +lastTime+   "     Best Time: " + bestTime;
+	m_label = new Label("Label", 250, 550, temp.c_str());
 
 }
 
@@ -358,6 +376,9 @@ void LoseState::Render()
 	//	i.second->Render();
 	for (auto const& i : m_objects)
 		i.second->Render();
+
+	m_label->Render();
+	
 	State::Render();
 }
 
@@ -365,10 +386,7 @@ void LoseState::Exit()
 {
 	TEMA::Unload("menu");
 	TEMA::Unload("losebg");
-	SOMA::StopSound();
-	SOMA::StopMusic();
-	SOMA::Unload("engines", SOUND_SFX);
-
+	FOMA::Unload("Label");
 	for (auto& i : m_objects)
 	{
 		delete i.second; // De-allocating GameObject*s
@@ -380,56 +398,3 @@ void LoseState::Resume(){}
 
 // End of Lose State
 
-// Start of Win State
-
-WinState::WinState(){}
-
-void WinState::Enter()
-{
-	TEMA::Load("Img/menubutton.png", "menu");
-	TEMA::Load("Img/WinBack.jpg", "winbg");
-	m_objects.push_back(pair<string, GameObject*>("WinBg",
-		new Image({ 0, 0, 1920, 1200 }, { 0, 0, 1024, 768 }, "winbg")));
-	m_objects.push_back(pair<string, GameObject*>("MainMenu",
-		new MainMenuButton({ 0, 0, 400, 100 }, { 412, 384, 200, 50 }, "menu")));
-}
-
-void WinState::Update()
-{
-	for (auto const& i : m_objects)
-		i.second->Update();
-	if (STMA::StateChanging()) return;
-}
-
-void WinState::Render()
-{
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 100, 0, 255);
-	SDL_RenderClear(Engine::Instance().GetRenderer());
-	//for (auto const& i : m_objects)
-	//	i.second->Render();
-	for (auto const& i : m_objects)
-		i.second->Render();
-	State::Render();
-	
-}
-
-void WinState::Exit()
-{
-
-	TEMA::Unload("menu");
-	TEMA::Unload("winbg");
-
-	SOMA::StopSound();
-	SOMA::StopMusic();
-	SOMA::Unload("engines", SOUND_SFX);
-
-	for (auto& i : m_objects)
-	{
-		delete i.second; // De-allocating GameObject*s
-		i.second = nullptr; // ;)
-	}
-}
-
-void WinState::Resume(){}
-
-//End of Win State

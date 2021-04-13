@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AsteroidSprites.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Button3.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
@@ -161,7 +160,6 @@
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AsteroidSprites.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="Button3.h" />
     <ClInclude Include="CollisionManager.h" />
