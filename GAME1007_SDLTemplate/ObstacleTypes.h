@@ -5,7 +5,8 @@
 enum  ObstacleTypes
 {
 	SAW,
-	SPEAR,
+	SPEARNONFLIP,
+	SPEARFLIP,
 	ROLLWALL
 };
 

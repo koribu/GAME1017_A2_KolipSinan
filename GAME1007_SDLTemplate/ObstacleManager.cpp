@@ -21,7 +21,7 @@ void ObstacleManager::Update()
 {
 	for (int i=0;i< m_obstacles.size();i++)
 	{
-		if(m_obstacles[i]->GetDst()->x<-50)
+		if(m_obstacles[i]->GetDst()->x<-200)
 		{
 			delete m_obstacles[i];
 			m_obstacles[i] = nullptr;

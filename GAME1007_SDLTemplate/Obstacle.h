@@ -15,7 +15,7 @@ private:
 		m_iSpriteYaxis,
 		m_iFrame,
 		m_iFrameMax;
-	float m_moveRange,m_rangeMax,m_speed;
+	float m_rangeMax,m_speed;
 
 	SDL_RendererFlip m_flip;
 
