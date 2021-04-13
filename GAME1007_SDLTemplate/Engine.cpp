@@ -44,8 +44,8 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 	//
 
 
-	STMA::PushState(new GameState());
-	
+//	STMA::PushState(new GameState());
+	STMA::PushState(new TitleState());
 	m_running = true;
 	return true;
 }

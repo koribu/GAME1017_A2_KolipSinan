@@ -4,7 +4,7 @@
 
 Obstacle::Obstacle(SDL_Rect s, SDL_FRect d,ObstacleTypes type): SpriteObject(s,d)
 {
-	m_aniMods = SPEAR;
+	m_aniMods = type;
 	m_flip = SDL_FLIP_NONE;
 	
 	switch (m_aniMods)
@@ -162,8 +162,8 @@ void Obstacle::Update()
 	}
 	if (m_aniMods == SPEAR)
 	{
-		m_collisionRect.x = m_dst.x;
-		m_collisionRect.w = m_dst.w;
+		m_collisionRect.x = m_dst.x + 30;
+		m_collisionRect.w = m_dst.w-60;
 	}
 
 }
@@ -172,12 +172,8 @@ void Obstacle::Render()
 {
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("obstacles"),
 		&m_src, &m_dst, 0, nullptr,m_flip);
-	SDL_RenderDrawRectF(Engine::Instance().GetRenderer(), &m_collisionRect);
-	//if(m_flip == 2)
-	//{
-	//	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("obstacles"),
-	//		&m_src, &(m_dst+{0,0,0,0}), 0, nullptr, SDL_FLIP_NONE);
-	//}
+	//SDL_RenderDrawRectF(Engine::Instance().GetRenderer(), &m_collisionRect);
+
 }
 
 

@@ -54,16 +54,15 @@ TitleState::TitleState(){}
 
 void TitleState::Enter()
 {
-	TEMA::Load("Img/Title.png", "title");
 	TEMA::Load("Img/button.png", "play");
 	TEMA::Load("Img/TitleBack.jpg", "bg");
-	SOMA::Load("Aud/ihtimallerDenizi.mp3", "title", SOUND_MUSIC);
+
+	
 	m_objects.push_back(pair<string, GameObject*>("bg",
 		new Image({ 0, 0, 1920, 1200 }, { 0, 0, 1024, 768 }, "bg")));
-	m_objects.push_back(pair<string, GameObject*>("title",
-		new Image({ 0, 0, 800, 156 }, { 112, 100, 800, 156 }, "title")));
 	m_objects.push_back(pair<string, GameObject*>("play",
-		new PlayButton({ 0, 0, 400, 100 }, { 412, 384, 200, 50 }, "play")));
+		new PlayButton({ 0, 0, 400, 100 }, { 412, 200, 200, 50 }, "play")));
+	
 	SOMA::AllocateChannels(16);
 	SOMA::SetMusicVolume(32);
 	SOMA::PlayMusic("title", -1, 2000);
@@ -89,9 +88,9 @@ void TitleState::Render()
 
 void TitleState::Exit()
 {
-	TEMA::Unload("title");
 	TEMA::Unload("play");
 	TEMA::Unload("bg");
+	
 	SOMA::StopMusic();
 	SOMA::Unload("title", SOUND_MUSIC);
 	for (auto& i : m_objects)
@@ -115,7 +114,7 @@ void GameState::Enter() // Used for initialization.
 	SOMA::Load("Aud/Machadeiro.mp3", "song", SOUND_MUSIC);
 
 	SOMA::SetSoundVolume(16);
-	SOMA::SetMusicVolume(32);
+	SOMA::SetMusicVolume(5);
 	SOMA::PlayMusic("song", -1, 2000);
 	
 	TEMA::Load("Img/background.png", "background");
@@ -221,107 +220,6 @@ void GameState::Update()
 		//cout << obs->operator[](i)->getCollisionRect().x<< obs->operator[](i)->getCollisionRect().y<< obs->operator[](i)->getCollisionRect().w<<" "<< obs->operator[](i)->getCollisionRect().h << endl;
 	}
 	
-	//// Check collision. Player vs. asteroids.
-	//if (GetGo("ship") != nullptr)
-	//{
-	//	vector<Asteroid*>* field = &static_cast<AsteroidField*>(GetGo("astf"))->GetAsteroids();
-	//	vector<Enemy*>* enemyVec = &static_cast<EnemyManager*>(GetGo("enemyMA"))->GetEnemies();
-	//	SpaceShip* ship = static_cast<SpaceShip*>(GetGo("ship"));
-	//	for (unsigned int i = 0; i < field->size(); i++)
-	//	{
-	//		Asteroid* ast = field->at(i);
-	//		if (COMA::CircleCircleCheck(ship->GetCenter(), ast->GetCenter(),
-	//			ship->GetRadius(), ast->GetRadius()))
-	//		{
-	//			SOMA::PlaySound("explode");
-	//			delete GetGo("ship");
-	//			m_objects.erase(GetIt("ship")); // Erases whole ship std::pair.
-	//			m_objects.shrink_to_fit();
-	//			STMA::ChangeState(new LoseState());
-	//			return;
-	//		}
-	//	}
-	//	
-	//	for (unsigned int j = 0; j < enemyVec->size(); j++)
-	//	{
-	//		Enemy* e = enemyVec->at(j);
-	//		
-	//		if (COMA::CircleCircleCheck(ship->GetCenter(), e->GetCenter(),
-	//			ship->GetRadius(), e->GetRadius()))
-	//		{
-	//			SOMA::PlaySound("explosion");
-	//			delete GetGo("ship");
-	//			m_objects.erase(GetIt("ship"));
-	//			m_objects.shrink_to_fit();
-	//			STMA::ChangeState(new LoseState());
-	//			return;
-	//		}
-	//		vector<Bullet*>* bullets = &e->GetBullets();		
-	//		for (unsigned int i = 0; i < bullets->size(); i++)
-	//		{
-	//			Bullet* bul = bullets->at(i);
-	//			if(COMA::CircleCircleCheck(ship->GetCenter(),bul->GetCenter(),ship->GetRadius(),e->GetRadius()))
-	//			{
-	//				SOMA::PlaySound("explosion");
-	//				delete GetGo("ship");
-	//				m_objects.erase(GetIt("ship"));
-	//				m_objects.shrink_to_fit();
-	//				STMA::ChangeState(new LoseState());
-	//				return;
-	//			}
-	//		}
-	//	}
-	//	// Collision of bullets and asteroids.
-	//	vector<Bullet*>* bullets = &ship->GetBullets();
-	//	for (unsigned int i = 0; i < bullets->size(); i++)
-	//	{
-	//		Bullet* bul = bullets->at(i);
-	//		for (unsigned int j = 0; j < field->size(); j++ )
-	//		{
-	//			Asteroid* ast = field->at(j);
-	//		
-	//			if (COMA::CircleCircleCheck(bul->GetCenter(), ast->GetCenter(),
-	//				bul->GetRadius(), ast->GetRadius()))
-	//			{
-	//				SOMA::PlaySound("explosion");
-	//				delete bul;
-	//				bullets->erase(bullets->begin() + i);
-	//				bullets->shrink_to_fit();
-	//				delete ast;
-	//				field->erase(field->begin() + j);
-	//				field->shrink_to_fit();
-	//				score++;
-	//				return;
-	//			}
-	//			
-	//		}
-	//	
-	//	}
-	//	vector<Bullet*>* bllts = &ship->GetBullets();
-	//	for (unsigned int i = 0; i < bllts->size(); i++)
-	//	{
-	//		Bullet* bul = bllts->at(i);
-	//		for (unsigned int j = 0; j < enemyVec->size(); j++)
-	//		{
-	//			Enemy* e = enemyVec->at(j);
-	//			if (COMA::CircleCircleCheck(bul->GetCenter(), e->GetCenter(),
-	//				bul->GetRadius(), e->GetRadius()))
-	//			{
-	//				SOMA::PlaySound("explosion");
-	//				delete bul;
-	//				bllts->erase(bllts->begin() + i);
-	//				bllts->shrink_to_fit();
-	//				delete e;
-	//				enemyVec->erase(enemyVec->begin() + j);
-	//				enemyVec->shrink_to_fit();
-	//				score++;
-	//				return;
-	//			}
-	//		}
-	//	}
-	//}
-
-
 }
 
 void GameState::Render()
@@ -341,17 +239,23 @@ void GameState::Render()
 	
 }
 
+
+
+
+
+
+
 void GameState::Exit()
 {
-	TEMA::Unload("bg");
-	TEMA::Unload("sprites");
-	TEMA::Unload("enemy");
-	TEMA::Unload("asteroid");
+	TEMA::Unload("background");
+	TEMA::Unload("player");
+	TEMA::Unload("obstacles");
+	FOMA::Unload("Label");
 	SOMA::StopSound();
 	SOMA::StopMusic();
-	SOMA::Unload("pLaser", SOUND_SFX);
-	SOMA::Unload("explosion", SOUND_SFX);
-	SOMA::Unload("astrexplode", SOUND_SFX);
+	SOMA::Unload("jump", SOUND_SFX);
+	SOMA::Unload("dying", SOUND_SFX);
+	SOMA::Unload("spear", SOUND_SFX);
 	SOMA::Unload("song", SOUND_MUSIC);
 	for (auto& i : m_objects)
 	{

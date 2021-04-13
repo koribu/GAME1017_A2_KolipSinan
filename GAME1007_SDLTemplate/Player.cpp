@@ -10,8 +10,8 @@ Player::Player(SDL_Rect s, SDL_FRect d):SpriteObject(s,d)
 	m_iFrameMax = 8;
 
 	m_velocity = 0;
-	m_jumpForce = 15;
-	m_gravity = 1;
+	m_jumpForce = 10;
+	m_gravity = .5;
 	m_aniMod = RUN;
 
 	
@@ -22,8 +22,19 @@ Player::~Player()
 
 void Player::Update()
 {
-	if(m_aniMod ==DEAD && GetDst()->y == 490)
+	if(m_aniMod ==DEAD)
 	{
+		if (GetDst()->y < 490)
+		{
+			m_velocity -= m_gravity;
+			GetDst()->y -= m_velocity;
+			m_aniMod = JUMP;
+		}
+		else
+		{
+			GetDst()->y = 490;
+			m_velocity = 0;
+		}
 		Animate();
 		return;
 	}
@@ -55,7 +66,7 @@ void Player::Update()
 			GetDst()->x -= 5;
 	}
 	
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE))
+	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE)&& GetDst()->y == 490)
 	{
 		cout << "hello";
 		m_velocity += m_jumpForce;
@@ -88,7 +99,7 @@ void Player::Render()
 {
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("player"),
 		&m_src, &m_dst, 0, nullptr,SDL_FLIP_NONE);
-	SDL_RenderDrawRectF(Engine::Instance().GetRenderer(),&m_collisionRect);
+	//SDL_RenderDrawRectF(Engine::Instance().GetRenderer(),&m_collisionRect);
 }
 
 void Player::setDead()
